@@ -15,12 +15,11 @@ let count = -1;
     console.log('a user connected');
     
     socket.on("message:send", (data,room) => {
-        console.log(room);
 
-        // if(room==null)
+        if(room==null)
             socket.broadcast.emit("message:receive", data);
-        // else
-            // socket.to(room).emit("message:receive", data);
+        else
+            socket.to(room).emit("message:receive", data);
     });
     socket.on("disconnect", () => {
         console.log("Disconnect");
