@@ -62,10 +62,19 @@
             arr = dat.split(",");
             setColor();
         });
+
+        socket.on('got:users', (dat)=>{
+            // alert("hi")
+            console.log("hi");
+            // console.log(dat);
+            // alert(dat);
+        });
         document.querySelector("#room").addEventListener('click', event => {
             let room = document.querySelector("input").value;
             r = room;
             socket.emit('join:room', room);
+            //get all users from room
+            // socket.emit('get:users', room);
             alert("joined room");
         })
 

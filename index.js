@@ -28,16 +28,28 @@ const io = new Server(http,
     })
     socket.on("join:room", (room) => {
         socket.join(room);
-        
+        socket.to(room).emit('got:users', "hi");
+        console.log("hi");
         // io.in(room).allSockets().then((data)=>{
         //     const myArr = Array.from(data)
         //     console.log(myArr);
 
         // });
     });
-    socket.on("create:room", (room) => {
-        socket.join(room);
-    })
+    // socket.on('get:users', (room)=>{
+    //     // let myArr
+    //     // io.in(room).allSockets().then((data)=>{
+    //     //     myArr = Array.from(data)
+    //     //     console.log(myArr);
+    //     // });
+     
+    // })
+    // socket.on("make:move", (data,room) => {
+
+    // });
+    // socket.on("create:room", (room) => {
+    //     socket.join(room);
+    // })
 
 });
 
