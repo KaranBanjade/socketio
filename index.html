@@ -33,7 +33,8 @@
         </container>
     </container>
     <button id="connect">Connect</button>
-    <input type="text" /><button id="room">Room</button>
+    <input type="text" /><button id="room">Join Room</button>
+    <input type="text" /><button id="Croom">Create</button>
     <span id="ids">
         <h1>Connected Ids</h1>
 
@@ -44,21 +45,20 @@
     <button id="submit">Submit</button>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.2/socket.io.min.js"></script>
     <script>
-        let arr = ['green', 'blue', 'yellow', 'black', 'green', 'blue', 'yellow', 'black'];
-        // let arr;
+        // let arr = ['green', 'blue', 'yellow', 'black', 'green', 'blue', 'yellow', 'black'];
+        let arr;
         let r;
         socket = io("http://localhost:3000");
         //Socket Connection setup
         socket.on("connect", () => {
             alert("connected");
             setAction();
-            // createDivs();
             getColor();
         });
 
         //Message receive
         socket.on('message:receive', (dat) => {
-            alert(dat);
+            // alert(dat);
             arr = dat.split(",");
             setColor();
         });
@@ -70,7 +70,7 @@
         })
 
         document.querySelector("#submit").addEventListener('click', event => {
-            alert("message")
+            // alert("message")
             getColor();
 
             socket.emit('message:send', arr.toString(), r);
@@ -112,8 +112,12 @@
             document.querySelectorAll('div').forEach(item => {
                 item.addEventListener('click', event => {
                     item.style.backgroundColor = 'red';
+                    // alert("message")
+                    getColor();
+                    socket.emit('message:send', arr.toString(), r);
                 })
             })
+            
             // alert("set action");
         }
 

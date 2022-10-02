@@ -9,13 +9,14 @@ const io = new Server(http,
             origin: "*" 
         }   
     });
-let count = -1;
+    let count = -1;
+    let dat;
   io.on('connection', (socket) => {
     socket.broadcast.emit('new:user',++count);
     console.log('a user connected');
     
     socket.on("message:send", (data,room) => {
-
+        dat = data;
         if(room==null)
             socket.broadcast.emit("message:receive", data);
         else
@@ -27,7 +28,16 @@ let count = -1;
     })
     socket.on("join:room", (room) => {
         socket.join(room);
+        
+        // io.in(room).allSockets().then((data)=>{
+        //     const myArr = Array.from(data)
+        //     console.log(myArr);
+
+        // });
     });
+    socket.on("create:room", (room) => {
+        socket.join(room);
+    })
 
 });
 
