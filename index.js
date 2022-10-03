@@ -24,7 +24,7 @@ const io = new Server(http,
     });
     socket.on("disconnect", () => {
         console.log("Disconnect");
-        socket.broadcast.emit("message:Left",socket.id);
+        // socket.broadcast.emit("message:Left",socket.id);
     })
     socket.on("join:room", (room) => {
         socket.join(room);

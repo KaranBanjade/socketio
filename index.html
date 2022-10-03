@@ -32,7 +32,7 @@
             </span>
         </container>
     </container>
-    <button id="connect">Connect</button>
+    <button id="connect">disconnect</button>
     <input type="text" /><button id="room">Join Room</button>
     <input type="text" /><button id="Croom">Create</button>
     <span id="ids">
@@ -69,6 +69,14 @@
             // console.log(dat);
             // alert(dat);
         });
+        socket.on("message:Left", (dat)=>{
+            alert(dat, "left");
+        });
+        document.querySelector("#connect").addEventListener("click", () => {
+            socket.emit("disconnect");
+            alert("disconnected");
+        });
+
         document.querySelector("#room").addEventListener('click', event => {
             let room = document.querySelector("input").value;
             r = room;
