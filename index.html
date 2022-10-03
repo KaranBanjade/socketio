@@ -47,6 +47,7 @@
         let arr = ['green', 'blue', 'yellow', 'black', 'green', 'blue', 'yellow', 'black'];
         // let arr;
         let r;
+        let users = [];
         socket = io("http://localhost:3000");
         //Socket Connection setup
         socket.on("connect", () => {
@@ -57,16 +58,23 @@
         });
 
         //Message receive
-        socket.on('message:receive', (dat) => {
-            alert(dat);
+        socket.on('data:receive', (dat) => {
             arr = dat.split(",");
             setColor();
+        });
+        socket.on('message:receive', (dat) => {
+            alert(dat);
+        });
+        socket.on("got:user", (count,arr) => {
+            let users = arr;
+            alert(users);
         });
         document.querySelector("#room").addEventListener('click', event => {
             let room = document.querySelector("input").value;
             r = room;
             socket.emit('join:room', room);
             alert("joined room");
+            socket.emit('get:user', room);
         })
 
         document.querySelector("#submit").addEventListener('click', event => {
@@ -112,6 +120,10 @@
             document.querySelectorAll('div').forEach(item => {
                 item.addEventListener('click', event => {
                     item.style.backgroundColor = 'red';
+                    alert("message")
+                    getColor();
+
+                    socket.emit('data:send', arr.toString(), r);
                 })
             })
             // alert("set action");

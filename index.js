@@ -14,12 +14,12 @@ let count = -1;
     socket.broadcast.emit('new:user',++count);
     console.log('a user connected');
     
-    socket.on("message:send", (data,room) => {
+    socket.on("data:send", (data,room) => {
 
         if(room==null)
-            socket.broadcast.emit("message:receive", data);
+            socket.broadcast.emit("data:receive", data);
         else
-            socket.to(room).emit("message:receive", data);
+            socket.to(room).emit("data:receive", data);
     });
     socket.on("disconnect", () => {
         console.log("Disconnect");
@@ -27,7 +27,21 @@ let count = -1;
     })
     socket.on("join:room", (room) => {
         socket.join(room);
+        socket.to(room).emit("message:receive", "New User Joined");
     });
+    socket.on('get:user',(room)=>{
+        let myArr;
+        let count;
+        io.in(room).allSockets()
+        .then((data)=>{
+                myArr = Array.from(data)
+                console.log(myArr)
+            })
+        .then(()=>{
+            count = myArr.length;
+            socket.to(room).emit("got:user", count,myArr);
+        })
+    })
 
 });
 
