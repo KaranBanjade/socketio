@@ -42,41 +42,58 @@
 
     </script>
     <button id="submit">Submit</button>
+    <button id="test">Test</button>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.2/socket.io.min.js"></script>
     <script>
         let arr = ['green', 'blue', 'yellow', 'black', 'green', 'blue', 'yellow', 'black'];
         // let arr;
         let r;
         let users = [];
-        socket = io("http://localhost:3000");
-        //Socket Connection setup
-        socket.on("connect", () => {
-            alert("connected");
-            setAction();
-            // createDivs();
-            getColor();
+        document.getElementById("connect").addEventListener(("click"), event=>{
+            socket = io("http://localhost:3000");
+            //Socket Connection setup
+            socket.on("connect", () => {
+                alert("connected");
+                setAction();
+                // createDivs();
+                getColor();
+            });
+    
+            //Message receive
+            socket.on('data:receive', (dat) => {
+                arr = dat.split(",");
+                setColor();
+            });
+            socket.on('message:receive', async(dat) => {
+                alert(dat);
+                // alert(dat.includes("room"));
+                // alert(dat.contains("Begins"));
+            });
+            socket.on('new:user', (dat,id) => {
+                // console.log(id)
+                // alert(dat);
+                alert(`${id} Joined`);
+            });
+            socket.on("got:user", (count,arr) => {
+                let users = arr;
+                alert("got Users" + users);
+            });
+            socket.on("message:left", (dat,room) => {
+                alert(dat + " Disconnected");
+            });
+            socket.on("update:recieve", (dat) => {
+                alert(dat);
+            });
+            socket.on("room:created", (dat) => {
+               //Setup the board and wait for players
+               alert("empty board");
+            });
         });
-
-        //Message receive
-        socket.on('data:receive', (dat) => {
-            arr = dat.split(",");
-            setColor();
-        });
-        socket.on('message:receive', (dat) => {
-            alert(dat);
-        });
-        socket.on("got:user", (count,arr) => {
-            let users = arr;
-            alert(users);
-        });
-        document.querySelector("#room").addEventListener('click', event => {
+        document.querySelector("#room").addEventListener('click', async(event) => {
             let room = document.querySelector("input").value;
             r = room;
-            socket.emit('join:room', room);
-            alert("joined room");
-            socket.emit('get:user', room);
+            socket.emit("create:room", room);
         })
-
         document.querySelector("#submit").addEventListener('click', event => {
             alert("message")
             getColor();
@@ -84,7 +101,15 @@
             socket.emit('message:send', arr.toString(), r);
             // socket.emit('message:send', "test,r);
         })
-
+        document.querySelector('#test').addEventListener('click', event => {
+            // socket.emit('update', r);
+            // alert("test");
+            socket.emit('test', r);
+            // socket.emit("get:user", r, (resp)=>{
+            //     alert(resp);
+            //     });
+            // socket.emit('user:disconnect', r);
+        });
         const setColor = () => {
             document.querySelectorAll("div").forEach((item, key) => {
                 item.style.backgroundColor = arr[key];
@@ -120,10 +145,10 @@
             document.querySelectorAll('div').forEach(item => {
                 item.addEventListener('click', event => {
                     item.style.backgroundColor = 'red';
-                    alert("message")
                     getColor();
 
                     socket.emit('data:send', arr.toString(), r);
+                    socket.emit('turn:send', r);
                 })
             })
             // alert("set action");
