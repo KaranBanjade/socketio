@@ -43,6 +43,7 @@
     </script>
     <button id="submit">Submit</button>
     <button id="test">Test</button>
+    <input type="text" id="text"/><button id="submit">Submit</button>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.2/socket.io.min.js"></script>
     <script>
         let arr = ['green', 'blue', 'yellow', 'black', 'green', 'blue', 'yellow', 'black'];
@@ -97,6 +98,10 @@
         document.querySelector("#submit").addEventListener('click', event => {
             alert("message")
             getColor();
+            // getColor();
+            // socket.emit('message:send', arr.toString(),r);
+            socket.emit('message:send', document.querySelector("#text").value,r);
+        })
 
             socket.emit('message:send', arr.toString(), r);
             // socket.emit('message:send', "test,r);
