@@ -1,6 +1,5 @@
 const express = require('express');
-const { disconnect } = require('process');
-const app = express();
+const app = express(); 
 const http = require('http').Server(app);
 const port = 3000;
 const { Server } = require("socket.io");
@@ -11,11 +10,9 @@ const io = new Server(http,
         }   
     });
 let gamestarted = false;
-let players = [];
+
 io.on('connection', (socket) => {
-    //   socket.join(socket.id);
-    //   socket.to(Array.from(socket.rooms)[0]).emit('new:user',socket.id);
-          console.log('a user connected');
+        console.log('a user connected');
 
         //considering for 2 player, when the count is 2, start the game
         socket.on('is:ready',(room)=>{
@@ -39,6 +36,7 @@ io.on('connection', (socket) => {
                     socket.to(players[0]).emit(`turn:receive`,true);
                 }
         })
+
         socket.on("create:room", (room) => {
             // Empty Data Model
             let datamodel = {
@@ -50,6 +48,7 @@ io.on('connection', (socket) => {
             console.log("room created");
             io.in(room).emit('room:created',"empty");
         });
+
         //Join a specific room
         socket.on("join:room", (room) => {
             if(players.includes(socket.id))
@@ -63,6 +62,7 @@ io.on('connection', (socket) => {
                     socket.in(room).emit("message:receive", `${socket.id} Joined, Game Begins`);
             }
         });
+
         // Get all users in a room
         socket.on('get:user',async(room,callbackfunction)=>{
             let myArr;
@@ -72,6 +72,7 @@ io.on('connection', (socket) => {
             count = myArr.length;
             callbackfunction(myArr,count);
         })
+
         // Send the data between the users
         socket.on("data:send", (data,room) => {
             if(room==null)
@@ -79,6 +80,7 @@ io.on('connection', (socket) => {
         else
             socket.in(room).emit("data:receive", data);
         });
+
         // In case user disconencts
         socket.on('user:disconnect', (room) => {
             console.log("Disconnect");
@@ -86,6 +88,7 @@ io.on('connection', (socket) => {
             // console.log("Players",players);
             socket.in(room).emit("message:left",socket.id);
         });
+
         // when one wins the game
         socket.on("game:over",(room)=>{
         gamestarted = false;
@@ -100,9 +103,11 @@ io.on('connection', (socket) => {
             console.log(test);
             socket.in(room).emit("update:recieve",test.toString());
         });
+
         socket.on("disconnecting",()=>{
             socket.to(Array.from(socket.rooms)[1]).emit("message:left",socket.id);
-        })
+        });
+
         socket.on("disconnect",()=>{
             console.log("dis");
             players = players.filter(item => item !== socket.id);
@@ -111,7 +116,7 @@ io.on('connection', (socket) => {
             // socket.emit("message:left", room);
             // to send to everyone in room
             io.in(room).emit("message:left", room);
-        })
+        });
 
 });
 
