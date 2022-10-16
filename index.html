@@ -6,11 +6,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Socket IO</title>
+
     <style>
         div {
-            width: 40px;
-            height: 40px;
-            border: black 1px solid;
+            width: 42px;
+            height: 42px;
+            border: black 2px solid;
         }
     </style>
 </head>
@@ -44,7 +45,6 @@
 
         <script>
 
-
         <button id="connect" style="margin: 5px;">Connect</button>
         <input style="margin: 5px;" type="text" /><button id="room" style="margin: 5px;">Room</button>
         <span id="ids">
@@ -72,8 +72,11 @@
             socket.on("connect", () => {
                 alert("connected");
                 console.log("connected");
+
                 setAction();
+
                 // createDivs();
+
                 getColor();
             });
 
@@ -93,8 +96,10 @@
                 alert(`${id} Joined`);
             });
             socket.on("got:user", (count, arr) => {
+
                 let users = arr;
                 alert("got Users" + users);
+
             });
             socket.on("message:left", (dat, room) => {
                 alert(dat + " Disconnected");
