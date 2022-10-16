@@ -33,6 +33,18 @@
                 </span>
             </container>
         </container>
+
+        <button id="connect" style="margin: 5px;">Connect</button>
+
+        <input style="margin: 5px;" type="text" /><button id="room" style="margin: 5px;">Room</button>
+
+        <span id="ids">
+            <h1>Connected Ids</h1>
+        </span>
+
+        <script>
+
+
         <button id="connect" style="margin: 5px;">Connect</button>
         <input style="margin: 5px;" type="text" /><button id="room" style="margin: 5px;">Room</button>
         <span id="ids">
@@ -47,16 +59,19 @@
     </section>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.2/socket.io.min.js"></script>
+
     <script>
+
         let arr = ['green', 'blue', 'yellow', 'black', 'green', 'blue', 'yellow', 'black'];
-        // let arr;
         let r;
         let users = [];
+
         document.getElementById("connect").addEventListener(("click"), event => {
             socket = io("http://localhost:3000");
             //Socket Connection setup
             socket.on("connect", () => {
                 alert("connected");
+                console.log("connected");
                 setAction();
                 // createDivs();
                 getColor();
@@ -92,11 +107,13 @@
                 alert("empty board");
             });
         });
+
         document.querySelector("#room").addEventListener('click', async (event) => {
             let room = document.querySelector("input").value;
             r = room;
             socket.emit("create:room", room);
         })
+
         document.querySelector("#submit").addEventListener('click', event => {
             alert("message")
             getColor();
@@ -117,17 +134,20 @@
             //     });
             // socket.emit('user:disconnect', r);
         });
+
         const setColor = () => {
             document.querySelectorAll("div").forEach((item, key) => {
                 item.style.backgroundColor = arr[key];
             })
         }
+
         const getColor = () => {
             document.querySelectorAll("div").forEach((item, key) => {
                 arr[key] = item.style.backgroundColor;
             })
             // alert("get");
         }
+
         const createDivs = () => {
             document.querySelector("container").innerHTML = `
             <container id="container">
@@ -146,19 +166,20 @@
             </container>
             `;
 
-            alert("created");
+            alert(" created Divs");
         }
+
         const setAction = () => {
             document.querySelectorAll('div').forEach(item => {
                 item.addEventListener('click', event => {
-                    item.style.backgroundColor = 'red';
-                    getColor();
+                     item.style.backgroundColor = 'red';
+                     getColor();
 
                     socket.emit('data:send', arr.toString(), r);
                     socket.emit('turn:send', r);
                 })
             })
-            // alert("set action");
+             // alert("set action"); 
         }
 
     </script>
