@@ -16,34 +16,35 @@
 </head>
 
 <body>
-    <container>
-        <container id="container">
-            <span>
-                <div id="green" style="background-color: green;"></div>
-                <div id="blue" style="background-color: blue;"></div>
-                <div id="yellow" style="background-color: yellow;"></div>
-                <div id="black" style="background-color: black;" onclick="action(this)"></div>
-            </span>
-            <span>
-                <div id="green" style="background-color: green;"></div>
-                <div id="blue" style="background-color: blue;"></div>
-                <div id="yellow" style="background-color: yellow;"></div>
-                <div id="black" style="background-color: black;" onclick="action(this)"></div>
-            </span>
+    <section style="display: flex;align-items: center;justify-content: center;flex-direction: column;">
+        <container>
+            <container id="container">
+                <span>
+                    <div id="green" style="background-color: green;"></div>
+                    <div id="blue" style="background-color: blue;"></div>
+                    <div id="yellow" style="background-color: yellow;"></div>
+                    <div id="black" style="background-color: black;" onclick="action(this)"></div>
+                </span>
+                <span>
+                    <div id="green" style="background-color: green;"></div>
+                    <div id="blue" style="background-color: blue;"></div>
+                    <div id="yellow" style="background-color: yellow;"></div>
+                    <div id="black" style="background-color: black;" onclick="action(this)"></div>
+                </span>
+            </container>
         </container>
-    </container>
-    <button id="connect">Connect</button>
-    <input type="text" /><button id="room">Room</button>
-    <span id="ids">
-        <h1>Connected Ids</h1>
-    </span>
+        <button id="connect" style="margin: 5px;">Connect</button>
+        <input style="margin: 5px;" type="text" /><button id="room" style="margin: 5px;">Room</button>
+        <span id="ids">
+            <h1>Connected Ids</h1>
+        </span>
+        <script>
 
-    <script>
-    </script>
-
-    <button id="submit">Submit</button>
-    <button id="test">Test</button>
-    <input type="text" id="text"/><button id="submit">Submit</button>
+        </script>
+        <button id="submit" style="margin: 5px;">Submit</button>
+        <button id="test" style="margin: 5px;">Test</button>
+        <input type="text" style="margin: 5px;" id="text" /><button id="submit">Submit</button>
+    </section>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.2/socket.io.min.js"></script>
     <script>
@@ -51,7 +52,7 @@
         // let arr;
         let r;
         let users = [];
-        document.getElementById("connect").addEventListener(("click"), event=>{
+        document.getElementById("connect").addEventListener(("click"), event => {
             socket = io("http://localhost:3000");
             //Socket Connection setup
             socket.on("connect", () => {
@@ -60,38 +61,38 @@
                 // createDivs();
                 getColor();
             });
-    
+
             //Message receive
             socket.on('data:receive', (dat) => {
                 arr = dat.split(",");
                 setColor();
             });
-            socket.on('message:receive', async(dat) => {
+            socket.on('message:receive', async (dat) => {
                 alert(dat);
                 // alert(dat.includes("room"));
                 // alert(dat.contains("Begins"));
             });
-            socket.on('new:user', (dat,id) => {
+            socket.on('new:user', (dat, id) => {
                 // console.log(id)
                 // alert(dat);
                 alert(`${id} Joined`);
             });
-            socket.on("got:user", (count,arr) => {
+            socket.on("got:user", (count, arr) => {
                 let users = arr;
                 alert("got Users" + users);
             });
-            socket.on("message:left", (dat,room) => {
+            socket.on("message:left", (dat, room) => {
                 alert(dat + " Disconnected");
             });
             socket.on("update:recieve", (dat) => {
                 alert(dat);
             });
             socket.on("room:created", (dat) => {
-               //Setup the board and wait for players
-               alert("empty board");
+                //Setup the board and wait for players
+                alert("empty board");
             });
         });
-        document.querySelector("#room").addEventListener('click', async(event) => {
+        document.querySelector("#room").addEventListener('click', async (event) => {
             let room = document.querySelector("input").value;
             r = room;
             socket.emit("create:room", room);
@@ -101,11 +102,11 @@
             getColor();
             // getColor();
             // socket.emit('message:send', arr.toString(),r);
-            socket.emit('message:send', document.querySelector("#text").value,r);
+            socket.emit('message:send', document.querySelector("#text").value, r);
         })
 
-            // socket.emit('message:send', arr.toString(), r);
-            // socket.emit('message:send', "test,r);
+        // socket.emit('message:send', arr.toString(), r);
+        // socket.emit('message:send', "test,r);
         // })
         document.querySelector('#test').addEventListener('click', event => {
             // socket.emit('update', r);
