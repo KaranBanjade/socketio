@@ -78,7 +78,7 @@ io.on('connection', (socket) => {
             socket.in(room).emit("data:receive", data);
     });
 
-    // In case user disconencts
+    // In case user disconnects
     socket.on('user:disconnect', (room) => {
         console.log("Disconnect");
         // players.remove(socket.id);
@@ -121,5 +121,11 @@ io.on('connection', (socket) => {
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/index.html');
 });
-http.listen(port, () => { console.log(`listening on *:${port}`) });
-app.listen(5000, () => { console.log(`app listening at http://localhost:5000`) });
+
+http.listen(port, () => { 
+    console.log(`listening on *:${port}`) 
+});
+
+app.listen(5000, () => { 
+    console.log(`app listening at http://localhost:5000`) 
+});
